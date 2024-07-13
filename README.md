@@ -36,3 +36,22 @@
 - 文件夹用于创建嵌套路由，每个文件夹表示映射到 URL 段的路由段
 - 目录下 layout.tsx 默认当作布局模板文件
 - 浏览器无法访问 /app/lib、/app/ui 目录下的文件
+
+### 5.页面间导航
+
+- Link 组件代替<a>
+  - 页面顶部 `use client` 告诉 next 这个页面是客户端
+  - 不会整页刷新
+  - 代码自动分割
+  - 代码预取
+    > layout <- SideNav <- NavLink <- a 链接
+  - useRouter 获取路由钩子 back、push、replace
+  - usePathname()获取当前路由地址
+  - useSearchParams() 获取当前路由参数 `/dashboard?search=my-project` => `useSearchParams().get('search')`
+    `has()、getAll()、keys()、values()、entries()、forEach()、toString()`
+  - useParams() 获取路由动态参数
+    `/shop/[tag]/[item]`=> `useparams=> { tag: 'xxx', item: 'xxx' }`
+
+### 6.配置数据库
+
+### 7.获取数据 Fetcing Data
