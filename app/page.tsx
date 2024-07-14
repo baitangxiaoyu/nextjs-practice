@@ -4,8 +4,14 @@ import Link from 'next/link';
 import { lusitana } from '@/app/ui/fonts'
 import styles from '@/app/ui/home.module.css'
 import Image from 'next/image';
+import { sql } from "@vercel/postgres";
 
-export default function Page() {
+export default async function Page() {
+  const { rows } = await sql`SELECT invoices.amount, customers.name
+FROM invoices
+JOIN customers ON invoices.customer_id = customers.id
+WHERE invoices.amount = 666;`
+
   return (
     <main className="flex min-h-screen flex-col p-6">
       <div className="flex h-20 shrink-0 items-end rounded-lg bg-blue-500 p-4 md:h-52">
@@ -44,6 +50,13 @@ export default function Page() {
             className='block md:hidden'
             alt="Screenshots of the dashboard project showing mobile version"
           ></Image>
+        </div>
+        <div>
+          {rows.map((row) => (
+            <div key={row.id}>
+              {row.name} - {row.amount}
+            </div>
+          ))}
         </div>
       </div>
     </main>

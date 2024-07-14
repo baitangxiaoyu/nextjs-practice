@@ -54,4 +54,9 @@
 
 ### 6.配置数据库
 
+- vercel 创建数据库
+- vercel 通过 github 账号登陆，拉取对应代码仓库运行部署
+- vercel 上 postgres 数据库创建、填充、查询
+- 使用 `@vercel/postgres` 设置 PostgreSQL 数据库
+
 ### 7.获取数据 Fetcing Data
