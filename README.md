@@ -48,7 +48,7 @@
 - useRouter 获取路由钩子 back、push、replace
 - usePathname()获取当前路由地址
 - useSearchParams() 获取当前路由参数
-  `/dashboard?search=my-project** => **useSearchParams().get('search')`
+  `/dashboard?search=my-project => useSearchParams().get('search')`
   `has()、getAll()、keys()、values()、entries()、forEach()、toString()`
 - useParams() 获取路由动态参数
   `/shop/[tag]/[item] => useparams=> { tag: 'xxx', item: 'xxx' }`
@@ -66,7 +66,10 @@
   > 路由路径 => 页面组件 => 页面内调用函数请求数据库 => 数据库返回数据 => 合成具体页面
 - API、SQL、ORM
 - Next.js 组件
+
   - 默认就是 **RSC**（服务器组件）
   - **RSC** 中 数据 + 模版 => 具体页面
   - 获取数据不需要 **API** 映射
   - **RSC** 只能在服务器执行，也不会暴露敏感信息
+
+  ### 8.静态渲染、动态渲染
