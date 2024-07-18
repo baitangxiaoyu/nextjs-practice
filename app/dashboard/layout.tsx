@@ -1,6 +1,8 @@
 import React from 'react'
 import SideNav from '../ui/dashboard/sidenav'
 
+export const experimental_ppr = true;
+
 interface ILayoutProps extends React.PropsWithChildren { }
 function Layout(props: ILayoutProps) {
   return (
