@@ -115,3 +115,49 @@ export const experimental_ppr = true;
 ```
 
 > 部分预渲染是 Next.js 14 中引入的一项实验性功能
+
+### 11.搜索查询 search | 分页 Pagination
+
+- 搜索查询 search
+
+  > <Search>是一个客户端组件，因此您使用 useSearchParams() 从客户端访问参数。
+  >
+  > <Table>是一个获取自己的数据的服务器组件，因此您可以将 prop({ searchParams }) 从页面传递到组件。
+
+  - **URLSearchParams**:生成一个 URLSearchParams 对象，其中包含 URL 的查询字符串参数。
+  - **useParams**:读取由当前 URL 填充的路由动态参数。
+
+    ```
+    // Route -> /shop/[tag]/[item]
+    // URL -> /shop/shoes/nike-air-max-97
+    // `params` -> { tag: 'shoes', item: 'nike-air-max-97' }
+    ```
+
+  - **useSearchParams**:允许您访问当前 URL 的参数。
+
+    ```
+    ./dashboard/invoices?page=1&query=pending
+      const searchParams = useSearchParams();
+      searchParams.get('page)  //   {page: '1'}
+      searchParams.get('query) // {query: 'pending'}
+
+    ```
+
+  - **usePathname**:允许您读取当前 URL 的路径名。
+
+    ```
+    /dashboard/invoicesusePathname'
+    const pathname = usePathname() // /dashboard/invoices'
+    ```
+
+  - **useRouter**: 以编程方式在客户端组件内的路由之间启用导航
+    - router.push(href: string, { scroll: boolean })：对提供的路由执行客户端导航。将新条目添加到浏览器的历史记录。
+    - router.replace(href: string, { scroll: boolean })：执行对所提供路由的客户端导航，而无需向浏览器的历史记录堆栈.
+    - router.refresh()：刷新当前路由。向服务器发出新请求，重新获取数据请求，并重新呈现服务器组件。客户端将合并更新的 React - - Server 组件有效负载，而不会丢失未受影响的客户端 React（例如）或浏览器状态（例如滚动位置）。
+    - router.prefetch(href: string)：预取提供的路由，以加快客户端转换速度。
+    - router.back()：导航回浏览器历史记录堆栈中的上一个路由。
+    - router.forward()：向前导航到浏览器历史记录堆栈中的下一页。
+      > 该字符串已被删除，并替换为 pathnameusePathname()
+      > 该对象已被删除，并替换为 queryuseSearchParams()
+
+- 分页 Pagination
