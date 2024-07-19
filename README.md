@@ -120,17 +120,13 @@ export const experimental_ppr = true;
 
 - 搜索查询 search
 
-  > <Search>是一个客户端组件，因此您使用 useSearchParams() 从客户端访问参数。
-  >
-  > <Table>是一个获取自己的数据的服务器组件，因此您可以将 prop({ searchParams }) 从页面传递到组件。
-
   - **URLSearchParams**:生成一个 URLSearchParams 对象，其中包含 URL 的查询字符串参数。
   - **useParams**:读取由当前 URL 填充的路由动态参数。
 
     ```
-    // Route -> /shop/[tag]/[item]
-    // URL -> /shop/shoes/nike-air-max-97
-    // `params` -> { tag: 'shoes', item: 'nike-air-max-97' }
+     Route -> /shop/[tag]/[item]
+     URL -> /shop/shoes/nike-air-max-97
+     `params` -> { tag: 'shoes', item: 'nike-air-max-97' }
     ```
 
   - **useSearchParams**:允许您访问当前 URL 的参数。
@@ -156,8 +152,16 @@ export const experimental_ppr = true;
     - router.refresh()：刷新当前路由。向服务器发出新请求，重新获取数据请求，并重新呈现服务器组件。客户端将合并更新的 React - - Server 组件有效负载，而不会丢失未受影响的客户端 React（例如）或浏览器状态（例如滚动位置）。
     - router.prefetch(href: string)：预取提供的路由，以加快客户端转换速度。
     - router.back()：导航回浏览器历史记录堆栈中的上一个路由。
-    - router.forward()：向前导航到浏览器历史记录堆栈中的下一页。
-      > 该字符串已被删除，并替换为 pathnameusePathname()
-      > 该对象已被删除，并替换为 queryuseSearchParams()
+    - router.forward()：向前导航到浏览器历史记录堆栈中的下一页。 > 该字符串已被删除，并替换为 pathnameusePathname() > 该对象已被删除，并替换为 queryuseSearchParams()
+    ```
+    <Search>是一个客户端组件，因此您使用 useSearchParams() 从客户端访问参数。
+    <Table>是一个获取自己的数据的服务器组件，因此您可以将 prop({ searchParams }) 从页面传递到组件。
+    ```
 
 - 分页 Pagination
+
+### 12.Server Actions 丨 revalidatePath 丨 redirect 丨 Zod
+
+- React Server Actions 允许您直接在服务器上运行异步代码。它们消除了创建 API 端点来改变数据的需要
+- `'use server'` 将文件中所有导出的函数标记为服务器操作,可以导入这些服务器函数，并在客户端和服务器组件中使用
+- **revalidatePath**重新验证路径，清除此缓存并触发对服务器的新请求
