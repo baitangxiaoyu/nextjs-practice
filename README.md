@@ -164,4 +164,8 @@ export const experimental_ppr = true;
 
 - React Server Actions 允许您直接在服务器上运行异步代码。它们消除了创建 API 端点来改变数据的需要
 - `'use server'` 将文件中所有导出的函数标记为服务器操作,可以导入这些服务器函数，并在客户端和服务器组件中使用
-- **revalidatePath**重新验证路径，清除此缓存并触发对服务器的新请求
+- **revalidatePath（'xxxx'）**重新验证路径，清除浏览器页面缓存并触发对服务器的新请求
+- **redirect** 重定向页面路径
+- 动态路由段——/invoices/[id]/edit
+  - 服务器组件中可以在 props({ searchParams }) 获取动态路由参数
+- **Zod** 验证表单数据

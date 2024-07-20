@@ -1,6 +1,7 @@
 'use server'
 import { sql } from '@vercel/postgres'
 import { revalidatePath } from 'next/cache'
+import { redirect } from 'next/navigation';
 import { z } from 'zod'
 //表单校验
 const FormSchema = z.object({
@@ -28,4 +29,27 @@ export async function createInvoices(formData: FormData) {
   `;
   //重新验证路径，清除此缓存并触发对服务器的新请求
   revalidatePath('/dashboard/invoice')
+  redirect('/dashboard/invoices')
+}
+
+const UpdateInvoice = FormSchema.omit({ id: true, date: true });
+export async function updateInvoice(id: string, formData: FormData) {
+  const { customerId, amount, status } = UpdateInvoice.parse({
+    customerId: formData.get('customerId'),
+    amount: formData.get('amount'),
+    status: formData.get('status'),
+  });
+
+  const amountInCents = amount * 100;
+
+  await sql`UPDATE invoices SET customer_id=${customerId}, amount=${amountInCents}, status=${status}
+  WHERE id=${id}
+  `
+  revalidatePath('/dashboard/invoice')
+  redirect('/dashboard/invoices')  
+}
+
+export async function deleteInvoice(id:string) {
+  await sql`DELETE FROM invoices WHERE id=${id}`
+  revalidatePath('/dashboard/invoices')
 }
