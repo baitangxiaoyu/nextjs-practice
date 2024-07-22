@@ -169,3 +169,17 @@ export const experimental_ppr = true;
 - 动态路由段——/invoices/[id]/edit
   - 服务器组件中可以在 props({ searchParams }) 获取动态路由参数
 - **Zod** 验证表单数据
+
+### 13.错误处理 Handing Erros
+
+- 操作数据库出错
+  - 添加 **try/catch** 到服务器操作
+  - **redirect** 不能写在 **try/catch** 里面
+- 项目代码出错
+  - 页面目录下增加**error.tsx**，如果页面出现任何错误，则显示 **error.tsx**
+  - **error.tsx**需要是一个客户端组件,页面接收 props({ error , reset})
+    - error：此对象是 JavaScript 原生 Error 目的。
+    - reset：这是一个重置错误边界的函数。执行时，该函数将尝试重新渲染路线段
+- 数据不存在报错，尝试获取不存在的资源
+  - 使用 notFound 函数和 not-found 文件处理 404 错误
+  - notFound 它将优先于 error.tsx
