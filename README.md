@@ -183,3 +183,18 @@ export const experimental_ppr = true;
 - 数据不存在报错，尝试获取不存在的资源
   - 使用 notFound 函数和 not-found 文件处理 404 错误
   - notFound 它将优先于 error.tsx
+
+### 14.表单验证 | useFormState | 海外远程工作技术栈
+
+- 可访问性（所有人都可以使用的 web 应用，包括残障人士）
+- 表单验证
+  - 客户端验证（input 使用 required）
+    - 及时反馈，利于用户体验
+    - 减轻服务器压力
+  - 服务器端验证
+    - 降低恶意用户绕过客户端验证的风险
+    - 确保真实数据有一个真实的来源
+    - 由 action 做服务器验证成功，进行数据库操作失败，返回失败信息
+    - **useActionState**
+      - 采用两个参数：(action, initialState) (请求的 action，初始默认状态)
+      - 返回两个值： [state, formAction] [ 表单状态，form 提交调用的函数 ]

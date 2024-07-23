@@ -1,26 +1,44 @@
 'use server'
-import { sql } from '@vercel/postgres'
-import { revalidatePath } from 'next/cache'
+import { sql } from '@vercel/postgres';
+import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
-import { z } from 'zod'
+import { z } from 'zod';
 //表单校验
 const FormSchema = z.object({
   id: z.string(),
-  customerId: z.string(),
-  amount: z.coerce.number(),
-  status: z.enum(['pending', 'paid']),
+  customerId: z.string({invalid_type_error:'请选择一个客户名称'}),
+  amount: z.coerce.number().gt(0,{message:'金额必须大于0'}),
+  status: z.enum(['pending', 'paid'],{invalid_type_error:'请选择一个状态'}),
   date: z.string(),
 });
 const CreateInvoice = FormSchema.omit({ id: true, date: true });
-export async function createInvoices(formData: FormData) {
+//错误信息-类型描述
+
+export type State = {
+  errors?: {
+    customerId?: string[];
+    amount?: string[];
+    status?: string[];
+  };
+  message?: string | null;
+};
+ 
+export async function createInvoices(prevState:State,formData: FormData) {
   try {
-    const { customerId, amount, status } = CreateInvoice.parse({
+    // safeParse()将返回包含 OR 字段的对象
+    const vaildatedFields = CreateInvoice.safeParse({
       customerId: formData.get('customerId'),
       amount: formData.get('amount'),
       status: formData.get('status'),
     });
-  
+    if (!vaildatedFields.success) {
+      return {
+        errors: vaildatedFields.error.flatten().fieldErrors,
+        message:'创建发票失败'
+      }
+    }
     //创建发票逻辑
+    const { customerId, amount, status } = vaildatedFields.data;
     const amountInCents  = amount * 100
     const date = new Date().toISOString().split('T')[0]
     
