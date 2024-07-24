@@ -198,3 +198,9 @@ export const experimental_ppr = true;
     - **useActionState**
       - 采用两个参数：(action, initialState) (请求的 action，初始默认状态)
       - 返回两个值： [state, formAction] [ 表单状态，form 提交调用的函数 ]
+
+### 15.身份验证 ｜ 授权
+
+- NextAuth.js 添加身份验证
+  - 消除了管理会话、登录和注销以及身份验证的其他方面所涉及的大部分复杂性
+  - 为 Next.js 应用程序中的身份验证提供了统一的解决方案
