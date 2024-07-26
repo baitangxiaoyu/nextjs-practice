@@ -201,6 +201,12 @@ export const experimental_ppr = true;
 
 ### 15.身份验证 ｜ 授权
 
-- NextAuth.js 添加身份验证
+- NextAuth 身份验证(给予授权)
+  - 账号 + 密码 (user@nextmail.com + 123456)
+  - 扫码登录
+  - 手机号 + 验证码
+  - 邮箱
+  - Github 账号
+- NextAuth 授权(能不能访问页面)
   - 为 Next.js 应用程序中的身份验证提供了统一的解决方案，消除了管理会话、登录和注销以及身份验证的其他方面所涉及的大部分复杂性
-  - **auth.config.ts** 配置文件中设置**pages**、**callbacks**、**providers**
+  - **auth.config.ts** 配置文件中设置**pages**、**callbacks**、**providers**，设置**middleware.tx**中间件进行路由跳转检验

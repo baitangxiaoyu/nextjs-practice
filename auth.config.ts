@@ -20,9 +20,9 @@ export const authConfig = {
       const isLoggedIn = !!auth?.user;
       const isOnDashboard = nextUrl.pathname.startsWith('/dashboard');
       if (isOnDashboard) {
-        if (isLoggedIn) return true;
-        return false;
+       return isLoggedIn
       } else if (isLoggedIn) {
+        // 已登录且不在仪表板，重定向到仪表板
         return Response.redirect(new URL('/dashboard', nextUrl));
       }
       return true;

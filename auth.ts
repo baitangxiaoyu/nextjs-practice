@@ -15,12 +15,18 @@ async function getUser(email: string): Promise<User | undefined> {
     throw new Error('Failed to fetch user.');
   }
 }
- 
+// auth 授权
+// signIn 登录
+// signOut 退出
 export const { auth, signIn, signOut } = NextAuth({
   ...authConfig,
+  // providers 提供多种身份验证方式
+  // credentials  账号 + 密码
   providers: [
     Credentials({
+        // credentials 账号 + 密码
       async authorize(credentials) {
+        // 校验账号密码
         const parsedCredentials = z
           .object({ email: z.string().email(), password: z.string().min(6) })
           .safeParse(credentials);
