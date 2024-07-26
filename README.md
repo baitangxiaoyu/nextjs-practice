@@ -202,5 +202,5 @@ export const experimental_ppr = true;
 ### 15.身份验证 ｜ 授权
 
 - NextAuth.js 添加身份验证
-  - 消除了管理会话、登录和注销以及身份验证的其他方面所涉及的大部分复杂性
-  - 为 Next.js 应用程序中的身份验证提供了统一的解决方案
+  - 为 Next.js 应用程序中的身份验证提供了统一的解决方案，消除了管理会话、登录和注销以及身份验证的其他方面所涉及的大部分复杂性
+  - **auth.config.ts** 配置文件中设置**pages**、**callbacks**、**providers**
