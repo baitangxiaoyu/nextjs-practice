@@ -184,7 +184,7 @@ export const experimental_ppr = true;
   - 使用 notFound 函数和 not-found 文件处理 404 错误
   - notFound 它将优先于 error.tsx
 
-### 14.表单验证 | useFormState | 海外远程工作技术栈
+### 14.表单验证 | useFormState
 
 - 可访问性（所有人都可以使用的 web 应用，包括残障人士）
 - 表单验证
