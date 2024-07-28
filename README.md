@@ -210,3 +210,33 @@ export const experimental_ppr = true;
 - NextAuth 授权(能不能访问页面)
   - 为 Next.js 应用程序中的身份验证提供了统一的解决方案，消除了管理会话、登录和注销以及身份验证的其他方面所涉及的大部分复杂性
   - **auth.config.ts** 配置文件中设置**pages**、**callbacks**、**providers**，设置**middleware.tx**中间件进行路由跳转检验
+
+### 16.添加元数据 ｜ SEO 处理
+
+- 元数据的作用和类型
+  - 让搜索引擎知道网页的内容，SEO（搜索引擎优化）
+  - title、description、keywords、open Graph、favicon
+- 元数据的配置
+
+  - 两种配置方式
+
+        - 项目根目录下：特别规定的文件名
+          favicon.ico 设置网站图标
+          robots.txt 网站爬虫设置
+          sitemap.xml
+        - 页面组件中：对象形式 or 函数形式
+          layout.tsx(全局)
+          page.tsx(局部)
+
+          ```
+          export const metadata: Metadata = {
+              title: '标题',
+              description: '描述',
+              keywords: ['关键词'],
+              openGraph: {
+                images:'分享主图',
+              },
+            metadataBase: new URL('网站前缀地址'),
+          }
+
+        ```
