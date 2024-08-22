@@ -5,9 +5,26 @@
 - **app**
   - **/app/lib** 获取数据函数(操作数据库)
   - **/app/ui** 页面 UI 组件
+  - **layout.tsx** 全局布局文件
+  - **global-error.tsx** 全局错误页面
+  - **not-found.tsx** 全局 404 页面
 - **public** 静态资源（字体、图片、视频等）
 - **scripts** 脚本文件
 - **Next.config.js** 配置文件
+- **App Router** 模式下 app 任意目录下可访问页面，必须固定定义为 page.tsx
+- **Api** 路由要放置在 app 目录下，而且,必须命名为 route.ts，导出的 GET、POST 函数为请求处理函数
+  ```
+  export async function GET(request: NextRequest) {
+   // 获取数据逻辑
+   const data = await ...
+   return NextResponse.json({ data });
+  }
+   export async function POST(request: NextRequest) {
+    const body = await request.json();
+    // 插入数据逻辑
+    return NextResponse.json({ msg: 'Created success' });
+    }
+  ```
 
 ### 2.css 样式
 
@@ -73,28 +90,60 @@
 
 ### 8.静态渲染、动态渲染
 
-- **静态渲染**（NextJS 默认静态渲染）
-  - 服务端在构建部署、数据重新生效时获取数据和渲染页面 -更快的网站- 预渲染的内容可以缓存并在全球范围内分发。这确保世界各地的用户可以更快、更可靠地访问您的网站内容。 - 减少服务器负载- 由于内容已被缓存，您的服务器不必为每个用户请求动态生成内容。
+- **SSG 静态渲染**（NextJS 默认 SSG 静态渲染）
+
+  - 服务端在构建部署、数据重新生效时获取数据和渲染页面 -更快的网站- 预渲染的内容可以缓存并在全球范围内分发。这确保世界各地的用户可以更快、更可靠地访问您的网站内容。
+  - 减少服务器负载- 由于内容已被缓存，您的服务器不必为每个用户请求动态生成内容。
   - SEO - 预渲染的内容更容易被搜索引擎抓取工具索引，因为页面加载时内容已经可用。这可以提高搜索引擎排名。
-- **动态渲染**（unstable_noStore 方法开启动态渲染）
-  - 服务端在每个用户请求时获取数据和渲染页面
-  - 实时数据- 动态渲染可让您的应用程序显示实时或频繁更新的数据。这对于数据经常变化的应用程序来说是理想的选择。
-  - 用户特定内容- 更容易提供个性化内容，例如仪表板或用户配置文件，并根据用户交互更新数据。
-  - 请求时间信息- 动态渲染允许您访问只能在请求时知道的信息，例如 cookie 或 URL 搜索参数。
-- **耗时的数据获取阻塞页面渲染**
+  - SSG 生效时间，page.tsx 文件中增加导出 revalidate
+    ```
+     export const revalidate = 10; // 10秒
+    ```
+  - 预渲染动态参数，使用 generateStaticParams 替代 nextjs@13 的 getStaticPaths
+
+  ```
+  // /product/[id]/page.tsx
+  export const revalidate = 1000; // 1000秒
+
+  export function generateStaticParams() {
+  // return { [propertyName]: value };
+  return [1, 2, 3].map(id => {
+  id
+  })
+  }
+
+  export default async function Page(p: { params : { id: string }}) {
+  const data = await getData(p.param.id);
+  // return ...
+  }
+  ```
+
+- **SSR 动态渲染**（unstable_noStore 方法开启动态渲染）
+- 服务端在每个用户请求时获取数据和渲染页面
+- 实时数据- 动态渲染可让您的应用程序显示实时或频繁更新的数据。这对于数据经常变化的应用程序来说是理想的选择。
+- 用户特定内容- 更容易提供个性化内容，例如仪表板或用户配置文件，并根据用户交互更新数据。
+- 请求时间信息- 动态渲染允许您访问只能在请求时知道的信息，例如 cookie 或 URL 搜索参数。
+
+```
+// 在页面文件顶部加入一行，保证每次访问都是最新的
+export const dynamic = 'force-dynamic';
+
+```
+
+- **React cache**可以用于记忆数据请求[React Server Components](https://react.dev/reference/react/cache)
 
 ### 9.Streaming 流式渲染 | 异步渲染
 
 - **流式渲染**
-  - 流式传输是一种数据传输技术，允许您将路由分解为更小的“块”，并在它们准备就绪时逐步将它们从服务器流式传输到客户端
-  - 两种方法可以在 **Next.js** 中实现流式传输
-    - 在页面级别，使用文件 **loading.tsx**
-    - 对于特定组件，使用 **Suspense** 组件
-  - 每个目录下 **loading.tsx** 会对当前目录下所有页面生效，页面加载慢使用时 NextJs 自动用 **loading.tsx** 填充
-  - 创建新文件夹时()，名称不会包含在 URL 路径中,此/dashboard/(xxx)/page.tsx 变成/dashboard
-  - 目录下新建 **(xxx)** 文件夹，将 **page.tsx** 和 **loading.tsx** 文件移动到 **(xxx)** 文件夹下，路由访问不受影响 **loading** 只对当前 **xxx** 文件夹下的页面生效
+- 流式传输是一种数据传输技术，允许您将路由分解为更小的“块”，并在它们准备就绪时逐步将它们从服务器流式传输到客户端
+- 两种方法可以在 **Next.js** 中实现流式传输
+  - 在页面级别，使用文件 **loading.tsx**
+  - 对于特定组件，使用 **Suspense** 组件
+- 每个目录下 **loading.tsx** 会对当前目录下所有页面生效，页面加载慢使用时 NextJs 自动用 **loading.tsx** 填充
+- 创建新文件夹时()，名称不会包含在 URL 路径中,此/dashboard/(xxx)/page.tsx 变成/dashboard
+- 目录下新建 **(xxx)** 文件夹，将 **page.tsx** 和 **loading.tsx** 文件移动到 **(xxx)** 文件夹下，路由访问不受影响 **loading** 只对当前 **xxx** 文件夹下的页面生效
 - **异步渲染**
-  - 子组件内部请求数据，使用 **Suspense** 包裹子组件
+- 子组件内部请求数据，使用 **Suspense** 包裹子组件
 
 ### 10.Partial Prerendering(部分预渲染 PPR)
 
@@ -103,15 +152,17 @@
 - 实现部分预渲染
 
 ```
+
 const nextConfig =
-    {
-      experimental: {
-        ppr: 'incremental',
-      },
+{
+experimental: {
+ppr: 'incremental',
+},
 };
 
-将experimental_ppr段配置选项添加到静态页面中
+将 experimental_ppr 段配置选项添加到静态页面中
 export const experimental_ppr = true;
+
 ```
 
 > 部分预渲染是 Next.js 14 中引入的一项实验性功能
@@ -240,3 +291,7 @@ export const experimental_ppr = true;
           }
 
         ```
+
+```
+
+```
